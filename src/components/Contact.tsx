@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Linkedin, Github, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Send, CheckCircle, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
@@ -12,6 +12,8 @@ const Contact = () => {
     email: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const { toast } = useToast();
 
   const contactInfo = [
@@ -55,7 +57,7 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -68,21 +70,46 @@ const Contact = () => {
       return;
     }
 
-    // Create mailto link with form data
-    const subject = `Portfolio Contact from ${formData.name}`;
-    const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
-    const mailtoLink = `mailto:ankithverma.04@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    window.location.href = mailtoLink;
-    
-    // Show success message
-    toast({
-      title: "Message prepared!",
-      description: "Your email client should open with the message ready to send.",
-    });
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-    // Reset form
-    setFormData({ name: "", email: "", message: "" });
+    try {
+      const formElement = e.target as HTMLFormElement;
+      const response = await fetch(formElement.action, {
+        method: 'POST',
+        body: new FormData(formElement)
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        toast({
+          title: "Message sent successfully!",
+          description: "Thank you for reaching out. I'll get back to you soon.",
+        });
+        
+        // Reset form after delay
+        setTimeout(() => {
+          setFormData({ name: "", email: "", message: "" });
+          setSubmitStatus('idle');
+        }, 3000);
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or reach out via email directly.",
+        variant: "destructive"
+      });
+      
+      // Reset error state after delay
+      setTimeout(() => {
+        setSubmitStatus('idle');
+      }, 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -183,7 +210,39 @@ const Contact = () => {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form 
+                    onSubmit={handleSubmit} 
+                    action="https://api.web3forms.com/submit"
+                    method="POST"
+                    className="space-y-6"
+                  >
+                    <input type="hidden" name="access_key" value="5007fe84-fc7c-49ce-8534-e8cc5fea74e9" />
+                    
+                    {/* Success/Error Messages */}
+                    {submitStatus === 'success' && (
+                      <div className="p-4 bg-green-50 border border-green-200 rounded-lg animate-fade-in">
+                        <div className="flex items-center space-x-3">
+                          <CheckCircle className="h-6 w-6 text-green-600 animate-scale-in" />
+                          <div>
+                            <p className="text-green-800 font-semibold">Your message has been sent successfully!</p>
+                            <p className="text-green-600 text-sm">Thank you for reaching out. I'll get back to you soon.</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {submitStatus === 'error' && (
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-lg animate-fade-in">
+                        <div className="flex items-center space-x-3">
+                          <XCircle className="h-6 w-6 text-red-600 animate-scale-in" />
+                          <div>
+                            <p className="text-red-800 font-semibold">Something went wrong. Please try again.</p>
+                            <p className="text-red-600 text-sm">Or reach out via email directly.</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
                     <div>
                       <Input
                         type="text"
@@ -192,6 +251,7 @@ const Contact = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         className="border-primary/20 focus:border-primary"
+                        disabled={isSubmitting}
                         required
                       />
                     </div>
@@ -204,6 +264,7 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         className="border-primary/20 focus:border-primary"
+                        disabled={isSubmitting}
                         required
                       />
                     </div>
@@ -215,6 +276,7 @@ const Contact = () => {
                         value={formData.message}
                         onChange={handleInputChange}
                         className="border-primary/20 focus:border-primary min-h-[120px]"
+                        disabled={isSubmitting}
                         required
                       />
                     </div>
@@ -222,10 +284,20 @@ const Contact = () => {
                     <Button 
                       type="submit"
                       size="lg"
-                      className="w-full bg-primary hover:bg-primary-dark hover-lift"
+                      className="w-full bg-primary hover:bg-primary-dark hover-lift disabled:opacity-50"
+                      disabled={isSubmitting || submitStatus === 'success'}
                     >
-                      <Send className="mr-2 h-5 w-5" />
-                      Send Message
+                      {isSubmitting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-2"></div>
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-5 w-5" />
+                          Send Message
+                        </>
+                      )}
                     </Button>
                   </form>
                 </CardContent>
