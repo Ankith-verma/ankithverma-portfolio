@@ -59,7 +59,7 @@ const Navbar = () => {
             className="text-xl font-bold text-primary cursor-pointer hover:text-primary-light transition-colors"
             onClick={() => scrollToSection("home")}
           >
-            Ankith Kumar Verma
+            Ankith Verma
           </div>
 
           {/* Desktop Navigation */}
