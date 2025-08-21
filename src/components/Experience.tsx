@@ -15,7 +15,7 @@ const Experience = () => {
       institution: "Basavarajeshwari Public School and College", 
       period: "2020 – 2022",
       grade: "87%",
-      description: "Science stream with focus on Mathematics, Physics, and Computer Science."
+      description: "Science stream with focus on Mathematics and Physics."
     },
     {
       degree: "X (Secondary)",
@@ -68,21 +68,6 @@ const Experience = () => {
                 Actively seeking <span className="text-primary font-semibold">internships and opportunities</span> to apply 
                 AI/ML skills in real-world applications and contribute to innovative teams.
               </p>
-              
-              <div className="grid md:grid-cols-3 gap-6 mt-8">
-                <div className="p-4 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors">
-                  <div className="text-2xl font-bold text-primary">4+</div>
-                  <div className="text-sm text-muted-foreground">Major Projects</div>
-                </div>
-                <div className="p-4 rounded-lg bg-accent/20 hover:bg-accent/30 transition-colors">
-                  <div className="text-2xl font-bold text-primary">2+</div>
-                  <div className="text-sm text-muted-foreground">Certifications</div>
-                </div>
-                <div className="p-4 rounded-lg bg-primary-light/10 hover:bg-primary-light/20 transition-colors">
-                  <div className="text-2xl font-bold text-primary">3</div>
-                  <div className="text-sm text-muted-foreground">Tech Stacks</div>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>

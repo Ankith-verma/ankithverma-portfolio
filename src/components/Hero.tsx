@@ -22,10 +22,7 @@ const Hero = () => {
       id="home" 
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{
-        background: `linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light))), url(${heroBg})`,
-        backgroundBlendMode: 'overlay',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: `linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)))`,
       }}
     >
       {/* Animated Background Elements */}
@@ -55,6 +52,7 @@ const Hero = () => {
             <Button 
               size="lg"
               className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover-lift"
+              onClick={() => window.open('https://drive.google.com/file/d/1Z8UukvZ-tGMgugSVmNlHg-F2bYhO2HcW/view?usp=drive_link', '_blank')}
             >
               <Download className="mr-2 h-5 w-5" />
               Download Resume
@@ -63,7 +61,7 @@ const Hero = () => {
               size="lg"
               variant="outline"
               onClick={scrollToContact}
-              className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover-lift"
+              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover-lift"
             >
               <Mail className="mr-2 h-5 w-5" />
               Let's Connect

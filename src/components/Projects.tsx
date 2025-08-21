@@ -14,7 +14,7 @@ const Projects = () => {
         "Leave history tracking",
         "Attendance-based reductions"
       ],
-      githubUrl: "https://github.com/ankithverma04",
+      githubUrl: "https://github.com/ankithverma04/Leave-Tracker",
       liveUrl: "#"
     },
     {
@@ -27,7 +27,7 @@ const Projects = () => {
         "Performance analytics",
         "Real-time tracking"
       ],
-      githubUrl: "https://github.com/ankithverma04",
+      githubUrl: "https://github.com/ankithverma04/Athlete_sponsorship",
       liveUrl: "#"
     },
     {
